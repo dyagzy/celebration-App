@@ -20,12 +20,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class CelebrationEntity {
+
   @Id private Long id;
+
   @Column(name = "celebration_name")
   private String name;
 
   @Column(name = "date_of_celebration", nullable = false)
   private String dateOfCelebration;
+
+  @Column(name = "time_of_celebration", nullable = false)
+  private String timeOfCelebration;
 
   private String message;
 
@@ -41,15 +46,12 @@ public class CelebrationEntity {
   private String alias;
 
   public CelebrationEntity(
-      CelebrantEntity celebrant,
-      String name,
-      String dateOfCelebration,
-      String message,
-      CelebrationType celebrationType) {
-    this.name = name;
-    this.dateOfCelebration = dateOfCelebration;
+      CelebrationType type, String message, String date, String time, CelebrantEntity celebrant) {
+
+    this.celebrationType = type;
+    this.timeOfCelebration = time;
+    this.dateOfCelebration = date;
     this.message = message;
     this.celebrant = celebrant;
-    this.celebrationType = celebrationType;
   }
 }

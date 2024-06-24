@@ -1,6 +1,7 @@
 package com.mySpringProject.demo.modules.greeting.interactors;
 
 import com.mySpringProject.demo.modules.greeting.entity.CelebrantEntity;
+import com.mySpringProject.demo.modules.greeting.entity.CelebrationEntity;
 import com.mySpringProject.demo.modules.greeting.entity.UserEntity;
 import com.mySpringProject.demo.modules.greeting.mappers.CelebrantMapper;
 import com.mySpringProject.demo.modules.greeting.mappers.CelebrationMapper;
@@ -11,13 +12,14 @@ import com.mySpringProject.demo.modules.greeting.models.ListCelebrationDTO;
 import com.mySpringProject.demo.modules.greeting.repository.CelebrantRepository;
 import com.mySpringProject.demo.modules.greeting.repository.CelebrationRepository;
 import com.mySpringProject.demo.modules.greeting.repository.UserEntityRepository;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CelebrantUseCaseImpl implements CelebrantUseCase {
-  private CelebrantRepository celebrantRepository;
-  private CelebrationRepository celebrationRepository;
-  private UserEntityRepository userRepository;
+  private final CelebrantRepository celebrantRepository;
+  private final CelebrationRepository celebrationRepository;
+  private final UserEntityRepository userRepository;
 
   public CelebrantUseCaseImpl(
       CelebrantRepository celebrantRepository,
@@ -34,30 +36,41 @@ public class CelebrantUseCaseImpl implements CelebrantUseCase {
     if (userRepository.findById(userId).isEmpty()) {
       // todo throw
     }
-    var celebrant = new CelebrantEntity(userRepository.findById(userId).get(), null);
+    var celebrant =
+        new CelebrantEntity(
+            input.getFirstName(),
+            input.getLastName(),
+            input.getEmail(),
+            input.getPhoneNumber(),
+            input.getAlias());
     celebrantRepository.save(celebrant);
 
     return new AddCelebrantDTO.Output(CelebrantMapper.convert(celebrant));
   }
 
   @Override
-  public AddCelebrationDTO.Output addCelebration(
-      AddCelebrationDTO.Input input, Long celebrationId) {
+  public AddCelebrationDTO.Output addCelebration(AddCelebrationDTO.Input input, Long celebrantId) {
 
-    if (celebrantRepository.findById(celebrationId).isEmpty()) {
+    if (celebrantRepository.findById(celebrantId).isEmpty()) {
 
       // todo throw a exception
     }
-    var celebrant = celebrantRepository.findById(celebrationId).get();
-    var celebration =
-        celebrant.addCelebration(
-            input.getTitle(),
-            input.getDateOfCelebration(),
-            input.getCelebrationMessage(),
-            input.getCelebrationType());
-    celebrationRepository.save(celebration);
-
-    return new AddCelebrationDTO.Output(CelebrationMapper.convert(celebration));
+    var celebrant = celebrantRepository.findById(celebrantId).get();
+    var celebrations =
+        input.getCelebrations().stream()
+            .map(
+                celebration ->
+                    new CelebrationEntity(
+                        celebration.getCelebrationType(),
+                        celebration.getMessage(),
+                        celebration.getDateOfCelebration(),
+                        celebration.getTimeOfCelebration(),
+                        celebrant))
+            .collect(Collectors.toSet());
+    celebrationRepository.saveAll(celebrations);
+    celebrant.addCelebration(celebrations);
+    celebrantRepository.save(celebrant);
+    return CelebrationMapper.convert(celebrant);
   }
 
   @Override

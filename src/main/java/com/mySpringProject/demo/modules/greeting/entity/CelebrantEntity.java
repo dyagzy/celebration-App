@@ -1,6 +1,5 @@
 package com.mySpringProject.demo.modules.greeting.entity;
 
-import com.mySpringProject.demo.modules.greeting.enums.CelebrationType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,6 +11,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,18 +28,31 @@ public class CelebrantEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @NotNull
   @Column(name = "first_name", nullable = false)
   private String firstName;
 
+  @NotNull
   @Column(name = "last_name")
   private String lastName;
 
+  @NotNull
   @Column(name = "email_address")
   private String emailAddress;
 
+  @NotNull
   @Column(name = "phone_number")
   private String phoneNumber;
 
+  @Column(name = "message")
+  @NotNull
+  private String message;
+
+  @Column(name = "message")
+  @Null
+  private String alias;
+
+  @NotNull
   @OneToMany(
       mappedBy = "celebrant",
       fetch = FetchType.LAZY,
@@ -49,22 +63,24 @@ public class CelebrantEntity {
   @JoinColumn(name = "user_id", nullable = false)
   private UserEntity user;
 
-  public CelebrantEntity(UserEntity user, Set<CelebrationEntity> celebrations) {
-    this.user = user;
+  public CelebrantEntity(
+      String firstName,
+      String lastName,
+      String emailAddress,
+      String phoneNumber,
+      String alias) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.emailAddress = emailAddress;
     this.phoneNumber = phoneNumber;
+    this.alias = alias;
   }
 
-  public CelebrationEntity addCelebration(
-      String name, String dateOfCelebration, String message, CelebrationType celebrationType) {
+  public CelebrantEntity addCelebration(
+      Set<CelebrationEntity> celebrations) {
 
-    var celebration =
-        new CelebrationEntity(this, name, dateOfCelebration, message, celebrationType);
-
-    this.celebrations.add(celebration);
-    return celebration;
+    this.celebrations=celebrations;
+    return  this;
   }
 
   // add user api

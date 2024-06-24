@@ -16,6 +16,7 @@ public class AddCelebrantDTO {
   public static class Input {
     private String firstName;
     private String lastName;
+    private String email;
     private String phoneNumber;
     private String alias;
     private List<CelebrantModel> celebrations;
