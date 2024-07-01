@@ -4,6 +4,7 @@ import com.mySpringProject.demo.modules.CelebrationUrls.CelebrationController;
 import com.mySpringProject.demo.modules.greeting.interactors.CelebrantUseCase;
 import com.mySpringProject.demo.modules.greeting.models.AddCelebrationDTO;
 import com.mySpringProject.demo.modules.greeting.models.ListCelebrationDTO;
+import java.util.UUID;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,12 +23,12 @@ public class CelebrationsController {
 
   @PostMapping(CelebrationController.POST_CELEBRATION)
   public AddCelebrationDTO.Output addCelebration(
-      @RequestBody AddCelebrationDTO.Input input, @PathVariable Long celebrantId) {
+      @RequestBody AddCelebrationDTO.Input input, @PathVariable ("celebrantId") UUID celebrantId) {
     return celebrantUseCase.addCelebration(input, celebrantId);
   }
 
   @GetMapping(CelebrationController.GET_LIST_CELEBRATION)
-  public ListCelebrationDTO.Output listCelebrations(@PathVariable("celebrantId") Long celebrantId){
+  public ListCelebrationDTO.Output listCelebrations(@PathVariable("celebrantId") UUID celebrantId){
 
     return celebrantUseCase.listCelebrations(celebrantId);
 

@@ -1,11 +1,12 @@
 package com.mySpringProject.demo.modules.greeting.models;
 
 import com.mySpringProject.demo.modules.greeting.shared.Celebrant;
-import java.util.List;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 public class AddCelebrantDTO {
   private AddCelebrantDTO() {
@@ -13,13 +14,13 @@ public class AddCelebrantDTO {
   }
 
   @Getter
+  @Setter
   public static class Input {
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String phoneNumber;
+    @NotNull private String firstName;
+    @NotNull private String lastName;
+    @NotNull private String email;
+    @NotNull private String phoneNumber;
     private String alias;
-    private List<CelebrantModel> celebrations;
   }
 
   @Data

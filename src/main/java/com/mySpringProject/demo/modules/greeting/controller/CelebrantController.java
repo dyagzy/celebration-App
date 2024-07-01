@@ -3,6 +3,7 @@ package com.mySpringProject.demo.modules.greeting.controller;
 import com.mySpringProject.demo.modules.CelebrationUrls;
 import com.mySpringProject.demo.modules.greeting.interactors.CelebrantUseCase;
 import com.mySpringProject.demo.modules.greeting.models.AddCelebrantDTO;
+import java.util.UUID;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +21,7 @@ public class CelebrantController {
 
   @PostMapping(CelebrationUrls.CelebrantController.POST_CELEBRANT)
   public AddCelebrantDTO.Output add(
-      @RequestBody AddCelebrantDTO.Input input, @PathVariable Long userId) {
+      @RequestBody AddCelebrantDTO.Input input, @PathVariable UUID userId) {
 
     return celebrantUseCase.add(input, userId);
   }

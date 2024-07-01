@@ -4,17 +4,19 @@ import com.mySpringProject.demo.modules.greeting.entity.CelebrantEntity;
 import com.mySpringProject.demo.modules.greeting.shared.Celebrant;
 
 public class CelebrantMapper {
-  public static Celebrant convert(CelebrantEntity celebrant) {
+  public static Celebrant convert(CelebrantEntity entity) {
 
-    if (celebrant == null) {
+    if (entity == null) {
+
       return new Celebrant();
     }
     return new Celebrant(
-        celebrant.getId(),
-        celebrant.getFirstName(),
-        celebrant.getLastName(),
-        celebrant.getEmailAddress(),
-        celebrant.getPhoneNumber());
+        entity.getId(),
+        entity.getFirstName(),
+        entity.getLastName(),
+        entity.getEmailAddress(),
+        entity.getPhoneNumber(),
+        entity.getAlias());
   }
 
   // brokerageteam@afrinvest.com

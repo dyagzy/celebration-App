@@ -2,6 +2,7 @@ package com.mySpringProject.demo.modules.greeting.models;
 
 import com.mySpringProject.demo.modules.greeting.shared.Celebration;
 import java.util.List;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +25,7 @@ public class AddCelebrationDTO {
   @Setter
   @Getter
   public static class Output {
-    private Long id;
+    private UUID id;
     private String firstName;
     private String lastName;
     private String email;

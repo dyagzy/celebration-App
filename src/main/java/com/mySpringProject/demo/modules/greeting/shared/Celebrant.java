@@ -1,16 +1,10 @@
 package com.mySpringProject.demo.modules.greeting.shared;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.util.UUID;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Setter
-public class Celebrant {
-  private Long id;
-  private String firstName;
-  private String lastName;
-  private String emailAddress;
-  private String phoneNumber;
+public record Celebrant(
+    UUID id, String firstName, String lastName, String emailAddress, String phoneNumber, String alias) {
+ public Celebrant(){
+   this(null,"Auto-generated", "Auto-generated", "Auto-generated", "Auto-generated","Auto-generated");
+ }
 }

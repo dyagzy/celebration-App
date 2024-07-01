@@ -5,18 +5,18 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
 import java.util.Set;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "celebrant")
@@ -25,8 +25,13 @@ import lombok.NoArgsConstructor;
 @Data
 public class CelebrantEntity {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  @GeneratedValue(generator = "UUID")
+  @GenericGenerator(
+      name = "UUID",
+      strategy = "org.hibernate.id.UUIDGenerator"
+  )
+  @Column(updatable = false, nullable = false, columnDefinition = "CHAR(40)")
+  private UUID id;
 
   @NotNull
   @Column(name = "first_name", nullable = false)
@@ -44,15 +49,9 @@ public class CelebrantEntity {
   @Column(name = "phone_number")
   private String phoneNumber;
 
-  @Column(name = "message")
-  @NotNull
-  private String message;
-
-  @Column(name = "message")
-  @Null
+  @Column(name = "alias")
   private String alias;
 
-  @NotNull
   @OneToMany(
       mappedBy = "celebrant",
       fetch = FetchType.LAZY,
@@ -64,6 +63,7 @@ public class CelebrantEntity {
   private UserEntity user;
 
   public CelebrantEntity(
+      UserEntity user,
       String firstName,
       String lastName,
       String emailAddress,
@@ -74,6 +74,7 @@ public class CelebrantEntity {
     this.emailAddress = emailAddress;
     this.phoneNumber = phoneNumber;
     this.alias = alias;
+    this.user=user;
   }
 
   public CelebrantEntity addCelebration(

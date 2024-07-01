@@ -12,6 +12,7 @@ import com.mySpringProject.demo.modules.greeting.models.ListCelebrationDTO;
 import com.mySpringProject.demo.modules.greeting.repository.CelebrantRepository;
 import com.mySpringProject.demo.modules.greeting.repository.CelebrationRepository;
 import com.mySpringProject.demo.modules.greeting.repository.UserEntityRepository;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
@@ -31,13 +32,16 @@ public class CelebrantUseCaseImpl implements CelebrantUseCase {
   }
 
   @Override
-  public AddCelebrantDTO.Output add(AddCelebrantDTO.Input input, Long userId) {
+  public AddCelebrantDTO.Output add(AddCelebrantDTO.Input input, UUID userId) {
 
     if (userRepository.findById(userId).isEmpty()) {
       // todo throw
     }
+
+    var user = userRepository.findById(userId).get();
     var celebrant =
         new CelebrantEntity(
+            user,
             input.getFirstName(),
             input.getLastName(),
             input.getEmail(),
@@ -49,7 +53,7 @@ public class CelebrantUseCaseImpl implements CelebrantUseCase {
   }
 
   @Override
-  public AddCelebrationDTO.Output addCelebration(AddCelebrationDTO.Input input, Long celebrantId) {
+  public AddCelebrationDTO.Output addCelebration(AddCelebrationDTO.Input input, UUID celebrantId) {
 
     if (celebrantRepository.findById(celebrantId).isEmpty()) {
 
@@ -83,7 +87,7 @@ public class CelebrantUseCaseImpl implements CelebrantUseCase {
   }
 
   @Override
-  public ListCelebrationDTO.Output listCelebrations(Long celebrantId) {
+  public ListCelebrationDTO.Output listCelebrations(UUID celebrantId) {
     var celebrations = celebrantRepository.findById(celebrantId).get().getCelebrations();
     return null;
   }
