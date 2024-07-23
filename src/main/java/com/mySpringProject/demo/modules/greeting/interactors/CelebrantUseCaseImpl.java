@@ -12,6 +12,7 @@ import com.mySpringProject.demo.modules.greeting.models.ListCelebrationDTO;
 import com.mySpringProject.demo.modules.greeting.repository.CelebrantRepository;
 import com.mySpringProject.demo.modules.greeting.repository.CelebrationRepository;
 import com.mySpringProject.demo.modules.greeting.repository.UserEntityRepository;
+import jakarta.transaction.Transactional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ public class CelebrantUseCaseImpl implements CelebrantUseCase {
   }
 
   @Override
+  @Transactional
   public AddCelebrantDTO.Output add(AddCelebrantDTO.Input input, UUID userId) {
 
     if (userRepository.findById(userId).isEmpty()) {
